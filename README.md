@@ -23,7 +23,7 @@ If you find this project useful in your research, please cite:
 First, clone the repository locally:
 
 ```
-git clone https://github.com/Hao840/OFAKD
+git clone https://github.com/Hao840/OFAKD.git
 ```
 
 Then, install PyTorch and [timm 0.6.5](https://github.com/huggingface/pytorch-image-models/tree/v0.6.5)
