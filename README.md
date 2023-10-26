@@ -6,7 +6,7 @@ Zhiwei Hao, Jianyuan Guo, Kai Han, Yehui Tang, Han Hu, Yunhe Wang, Chang Xu
 
 This paper studies using **heterogeneous** teacher and student models for knowledge distillation (KD) and proposes a one-for-all KD framework (OFA-KD). In this framework, intermediate features are projected into an aligned latent space to discard architecture-specific information, and an adaptive target enhancement scheme is proposed to prevent the student from being disturbed by irrelevant information.
 
-<img src=".assets/ofa.png" width="500px"/>
+<img src="assets/ofa.png" width="500px"/>
 
 If you find this project useful in your research, please cite:
 
