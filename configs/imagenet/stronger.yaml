@@ -1,0 +1,21 @@
+epochs: 300
+batch_size: 256
+lr: 5e-3
+opt: lamb
+sched: cosine
+weight_decay: 0.02
+warmup_epochs: 5
+warmup_lr: 1e-6
+smoothing: 0.0
+drop: 0
+drop_path: 0.05
+aug_repeats: 3
+aa: rand-m7-mstd0.5
+mixup: 0.1
+cutmix: 1.0
+color_jitter: 0
+crop_pct: 0.95
+bce_loss: true
+model_ema: true
+model_ema_decay:
+  - 0.9998

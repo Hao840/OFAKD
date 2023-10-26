@@ -1,0 +1,10 @@
+epochs: 300
+batch_size: 128
+lr: 0.05
+min_lr: 1e-3
+opt: sgd
+weight_decay: 2e-3
+sched: cosine
+warmup_epochs: 3
+color_jitter: 0
+smoothing: 0.1
