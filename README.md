@@ -13,7 +13,7 @@ If you find this project useful in your research, please cite:
 ```
 @inproceedings{hao2023ofa,
   author    = {Zhiwei Hao and Jianyuan Guo and Kai Han and Yehui Tang and Han Hu and Yunhe Wang and Chang Xu},
-  title     = {Learning Efficient Vision Transformers via Fine-Grained Manifold Distillation},
+  title     = {One-for-All: Bridge the Gap Between Heterogeneous Architectures in Knowledge Distillation},
   booktitle = {Advances in Neural Information Processing Systems},
   year      = {2023}
 }
