@@ -124,9 +124,6 @@ parser.add_argument('--speedtest', action='store_true')
 
 parser.add_argument('--eval-interval', default=1, type=int)  # eval every 1 epochs before epochs * eval_interval_end
 parser.add_argument('--eval-interval-end', default=0.75, type=float)
-
-parser.add_argument('--output-ma', type=str)  # will upload output dir to this s3 path after each epoch
-parser.add_argument('--model-name', type=str)  # replace model name shown in logs
 # ---------------------------------------------------------------------------------------
 
 # Dataset parameters
@@ -666,10 +663,9 @@ def main():
         if args.experiment:
             exp_name = args.experiment
         else:
-            model_name_parser = lambda name: args.model_name if args.model_name is not None else name  # todo: for ma
             exp_name = '-'.join([
                 datetime.now().strftime("%Y%m%d-%H%M%S"),
-                model_name_parser(safe_model_name(args.model)),
+                safe_model_name(args.model),
                 str(data_config['input_size'][-1])
             ])
         output_dir = get_outdir(args.output if args.output else './output/train', exp_name)
