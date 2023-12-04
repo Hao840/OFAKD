@@ -86,7 +86,16 @@ class CIFAR100InstanceSample(CIFAR100, ImageNetInstanceSample):
             print('done.')
 
     def __getitem__(self, index):
-        ImageNetInstanceSample.__getitem__(self, index)
+        img, target = CIFAR100.__getitem__(self, index)
+
+        if self.is_sample:
+            # sample contrastive examples
+            pos_idx = index
+            neg_idx = np.random.choice(self.cls_negative[target], self.k, replace=True)
+            sample_idx = np.hstack((np.asarray([pos_idx]), neg_idx))
+            return img, target, index, sample_idx
+        else:
+            return img, target, index
 
 
 class TimePredictor:
