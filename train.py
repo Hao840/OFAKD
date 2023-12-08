@@ -33,7 +33,7 @@ import yaml
 from timm.data import AugMixDataset, create_dataset, create_loader, FastCollateMixup, Mixup, \
     resolve_data_config
 from timm.loss import *
-from timm.models import convert_splitbn_model, create_model, model_parameters, safe_model_name
+from timm.models import convert_splitbn_model, create_model, model_parameters, safe_model_name, load_checkpoint
 from timm.optim import create_optimizer_v2, optimizer_kwargs
 from timm.scheduler import create_scheduler
 from timm.utils import *
@@ -76,6 +76,8 @@ parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
 parser.add_argument('--model', default='resnet18', type=str)
 parser.add_argument('--teacher', default='deit_tiny_patch16_224', type=str)
 parser.add_argument('--teacher-pretrained', default='', type=str)
+parser.add_argument('--use-ema-teacher', action='store_true')
+
 parser.add_argument('--distiller', default='ofa', type=str)
 parser.add_argument('--gt-loss-weight', default=1., type=float)
 parser.add_argument('--kd-loss-weight', default=1., type=float)
@@ -432,8 +434,8 @@ def main():
     if args.teacher:
         teacher = create_model(
             args.teacher,
-            checkpoint_path=args.teacher_pretrained,
             num_classes=args.num_classes)
+        load_checkpoint(teacher, args.teacher_pretrained, use_ema=args.use_ema_teacher)
         if Distiller.requires_feat:
             register_new_forward(teacher)
 
@@ -479,8 +481,11 @@ def main():
         if args.distiller == 'crd':
             dataset_train = CIFAR100InstanceSample(root=args.data_dir, train=True, is_sample=True, k=args.crd_k)
         else:
-            dataset_train = torchvision.datasets.CIFAR10(args.data_dir, train=True)
+            dataset_train = torchvision.datasets.CIFAR100(args.data_dir, train=True)
         dataset_eval = torchvision.datasets.CIFAR100(args.data_dir, train=False)
+        data_config['mean'] = (0.5071, 0.4865, 0.4409)
+        data_config['std'] = (0.2673, 0.2564, 0.2762)
+        data_config['interpolation'] = 'bilinear'
 
     else:
         if args.distiller == 'crd':
