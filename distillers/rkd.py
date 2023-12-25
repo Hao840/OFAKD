@@ -19,18 +19,18 @@ class RKD(BaseDistiller):
 
         logits_student, feat_student = self.student(image, requires_feat=True)
 
-        f_s = self.embed_s(feat_student[-1])[1]
-        f_t = self.embed_t(feat_teacher[-1])[1]
+        f_s = feat_student[-1]
+        f_t = feat_teacher[-1]
 
         stu = f_s.view(f_s.shape[0], -1)
         tea = f_t.view(f_t.shape[0], -1)
 
         with torch.no_grad():
-            t_d = _pdist(tea, self.rkd_squared, self.rkd_eps)
+            t_d = _pdist(tea, self.args.rkd_squared, self.args.rkd_eps)
             mean_td = t_d[t_d > 0].mean()
             t_d = t_d / mean_td
 
-        d = _pdist(stu, self.rkd_squared, self.rkd_eps)
+        d = _pdist(stu, self.args.rkd_squared, self.args.rkd_eps)
         mean_d = d[d > 0].mean()
         d = d / mean_d
 
@@ -49,7 +49,7 @@ class RKD(BaseDistiller):
         loss_a = F.smooth_l1_loss(s_angle, t_angle)
 
         loss_gt = self.args.gt_loss_weight * self.criterion(logits_student, label)
-        loss_kd = self.args.kd_loss_weight * (self.rkd_distance_weight * loss_d + self.rkd_angle_weight * loss_a)
+        loss_kd = self.args.kd_loss_weight * (self.args.rkd_distance_weight * loss_d + self.args.rkd_angle_weight * loss_a)
         losses_dict = {
             "loss_gt": loss_gt,
             "loss_kd": loss_kd,
