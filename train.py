@@ -662,7 +662,7 @@ def main():
     best_metric = None
     best_epoch = None
     saver = None
-    ema_savers = None
+    ema_savers = [None] * len(model_emas) if model_emas is not None else None
     output_dir = None
     if args.rank == 0:
         if args.experiment:
