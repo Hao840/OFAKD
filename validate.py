@@ -195,9 +195,14 @@ def validate(args):
 
     criterion = nn.CrossEntropyLoss().cuda()
 
-    dataset = create_dataset(
-        root=args.data, name=args.dataset, split=args.split,
-        download=args.dataset_download, load_bytes=args.tf_preprocessing, class_map=args.class_map)
+    if args.dataset == 'cifar100':
+        dataset = torchvision.datasets.CIFAR100(args.data, train=False)
+        data_config['mean'] = (0.5071, 0.4865, 0.4409)
+        data_config['std'] = (0.2673, 0.2564, 0.2762)
+    else:
+        dataset = create_dataset(
+            root=args.data, name=args.dataset, split=args.split,
+            download=args.dataset_download, load_bytes=args.tf_preprocessing, class_map=args.class_map)
 
     if args.valid_labels:
         with open(args.valid_labels, 'r') as f:
