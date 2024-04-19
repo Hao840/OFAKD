@@ -485,7 +485,6 @@ def main():
         dataset_eval = torchvision.datasets.CIFAR100(args.data_dir, train=False)
         data_config['mean'] = (0.5071, 0.4865, 0.4409)
         data_config['std'] = (0.2673, 0.2564, 0.2762)
-        data_config['interpolation'] = 'bilinear'
 
     else:
         if args.distiller == 'crd':
