@@ -17,6 +17,7 @@ import logging
 import torch
 import torch.nn as nn
 import torch.nn.parallel
+import torchvision
 from collections import OrderedDict
 from contextlib import suppress
 
@@ -166,6 +167,9 @@ def validate(args):
     param_count = sum([m.numel() for m in model.parameters()])
     _logger.info('Model %s created, param count: %d' % (args.model, param_count))
 
+    if args.dataset == 'cifar100':
+        args.mean = (0.5071, 0.4865, 0.4409)
+        args.std = (0.2673, 0.2564, 0.2762)
     data_config = resolve_data_config(
         vars(args),
         model=model,
@@ -197,8 +201,6 @@ def validate(args):
 
     if args.dataset == 'cifar100':
         dataset = torchvision.datasets.CIFAR100(args.data, train=False)
-        data_config['mean'] = (0.5071, 0.4865, 0.4409)
-        data_config['std'] = (0.2673, 0.2564, 0.2762)
     else:
         dataset = create_dataset(
             root=args.data, name=args.dataset, split=args.split,
