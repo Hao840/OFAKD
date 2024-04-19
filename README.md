@@ -55,7 +55,7 @@ Download and extract ImageNet train and val images from http://image-net.org/. T
 │  ├── ......
 ```
 
-### Training
+### Training on ImageNet
 
 To train a resnet18 student using [DeiT-T teacher](https://dl.fbaipublicfiles.com/deit/deit_tiny_patch16_224-a1311bcf.pth) on ImageNet on a single node with 8 GPUs, run:
 
@@ -76,6 +76,16 @@ Other results can be reproduced following similar commands by modifying:
 `--distiller`: which KD algorithm to use.
 
 For information about other tunable parameters, please refer to `train.py`.
+
+### Training on CIFAR-100
+
+To train a resnet18 student using Swin-T teacher on CIFAR-100 on a single node with 8 GPUs, run:
+
+```
+python -m torch.distributed.launch --nproc_per_node=8 train.py /path/to/cifar100 --config configs/cifar/cnn.yaml --model resnet18 --teacher swin_tiny_patch4_window7_224 --teacher-pretrained /path/to/teacher_checkpoint --num-classes 100 --distiller ofa --ofa-eps 1.0
+```
+
+Pretrained teacher models can be found [here](https://github.com/Hao840/OFAKD/releases/tag/checkpoint-cifar100)
 
 ### Custom usage
 
